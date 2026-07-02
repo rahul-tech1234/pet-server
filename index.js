@@ -33,6 +33,13 @@ async function run() {
             res.json(result);
             // console.log(result, "getPetData");
         });
+
+        app.get("/pets/:userId", async (req, res) => {
+            const { userId } = req.params;
+            console.log(userId);
+            const result = await petCollection.find({userId}).toArray();
+            res.json(result);
+        });
         app.get("/pet/:id", async (req, res) => {
             const { id } = req.params;
             const result = await petCollection.findOne({
@@ -40,6 +47,7 @@ async function run() {
             });
             res.json(result);
         });
+
         app.post("/pet", async (req, res) => {
             const petData = req.body;
             //console.log(petData);
@@ -72,11 +80,13 @@ async function run() {
             );
             res.json(result);
         });
-        app.delete('/adaption/:id',async(req,res)=>{
-            const {id}=req.params;
-            const result=await adapCollection.deleteOne({_id: new ObjectId(id)});
+        app.delete("/adaption/:id", async (req, res) => {
+            const { id } = req.params;
+            const result = await adapCollection.deleteOne({
+                _id: new ObjectId(id),
+            });
             res.json(result);
-        })
+        });
 
         await client.db("admin").command({ ping: 1 });
         console.log(
